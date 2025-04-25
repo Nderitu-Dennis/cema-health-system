@@ -47,12 +47,16 @@ public class EnrollmentController {
         Optional<HealthProgram> programOptional = healthProgramService.getHealthProgramById(programId);
 
         if(clientOptional.isPresent() && programOptional.isPresent()){
+            // enroll client in the selected program
             enrollmentService.enrollClientInProgram(clientOptional.get(), programOptional.get());
-            return "redirect:/clients/profile/" + clientId;
+
+            // after successful enrollment, redirect to success page
+            model.addAttribute("client", clientOptional.get());  // Add client info to the model for the success page
+            return "enrollment/enroll-success";
         }
         else {
             model.addAttribute("error", "Invalid client or program");
-            return "enrollment/enroll";
+            return "enrollment/enroll"; //if error arises , show enrollment form again
         }
 
     }

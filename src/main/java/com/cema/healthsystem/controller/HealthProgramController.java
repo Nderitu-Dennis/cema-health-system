@@ -28,14 +28,14 @@ public class HealthProgramController {
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("program", new HealthProgram());
-        return "program/create";
+        return "program/create-program";
     }
 
     // form submission for creating new health program above
     @PostMapping("/create")
     public String createProgram(@ModelAttribute HealthProgram program) {
         healthProgramService.createHealthProgram(program);
-        return "redirect:/programs/all-programs";
+        return "redirect:/program/all-programs";
     }
 
     // list all health programs

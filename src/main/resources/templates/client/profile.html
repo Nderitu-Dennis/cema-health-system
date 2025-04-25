@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body>
+<!-- Navbar -->
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Client Profile</h2>
+
+    <!-- Client Info -->
+    <div class="mb-6">
+        <p><strong>Name:</strong> <span th:text="${client.fullName}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${client.email}"></span></p>
+        <p><strong>Phone:</strong> <span th:text="${client.phoneNumber}"></span></p>
+    </div>
+
+    <!-- Enrollments -->
+    <div>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">Enrolled Programs</h3>
+        <ul class="list-disc pl-6">
+            <li th:each="enrollment : ${enrollments}">
+                <span th:text="${enrollment.program.name}"></span> -
+                <span th:text="${enrollment.enrollmentDate}"></span>
+            </li>
+        </ul>
+        <p th:if="${#lists.isEmpty(enrollments)}" class="text-gray-500">No enrollments yet.</p>
+    </div>
+</div>
+
+</body>
+</html>

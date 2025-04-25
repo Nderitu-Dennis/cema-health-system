@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body>
+<!-- Navbar -->
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800">Enroll Client in Program</h2>
+    <form th:action="@{/enrollments/enroll}" method="post" class="space-y-4">
+        <div class="mb-4">
+            <label for="clientId" class="block text-sm font-medium text-gray-700">Client</label>
+            <select name="clientId" id="clientId" class="w-full border px-3 py-2 rounded">
+                <option th:each="client : ${clients}"
+                        th:value="${client.id}"
+                        th:text="${client.fullName}">Client Name</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="programId" class="block text-sm font-medium text-gray-700">Health Program</label>
+            <select name="programId" id="programId" class="w-full border px-3 py-2 rounded">
+                <option th:each="program : ${programs}"
+                        th:value="${program.id}"
+                        th:text="${program.programName}">Program Name</option>
+            </select>
+        </div>
+
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Enroll Client
+        </button>
+    </form>
+</div>
+
+</body>
+</html>
