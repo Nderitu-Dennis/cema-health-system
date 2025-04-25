@@ -4,9 +4,11 @@ import com.cema.healthsystem.entity.Client;
 import com.cema.healthsystem.entity.Enrollment;
 import com.cema.healthsystem.entity.HealthProgram;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
     // get all enrollments by a client
