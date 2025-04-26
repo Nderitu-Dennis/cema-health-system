@@ -32,5 +32,12 @@
     </table>
 </div>
 
+<!--if no clients yet-->
+    <div class="text-center">
+        <p th:if="${#lists.isEmpty(clients)}" class="text-gray-500">
+            No clients have been registered yet. Register a new client <a th:href="@{/clients/register}"> <u>here</u></a></p>
+    </div>
+
+
 </body>
 </html>

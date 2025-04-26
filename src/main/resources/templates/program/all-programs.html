@@ -22,7 +22,7 @@
         </ul>
 
         <!-- If no programs are available -->
-        <p th:if="${#lists.isEmpty(programs)}" class="text-gray-500">No health programs available yet.</p>
+        <p th:if="${#lists.isEmpty(programs)}" class="text-gray-500">No health programs available yet. Create a program <a th:href="@{/programs/create}"><u>here</u></a></p>
     </div>
 </div>
 
