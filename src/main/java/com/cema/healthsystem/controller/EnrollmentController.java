@@ -46,18 +46,33 @@ public class EnrollmentController {
         Optional<Client> clientOptional = clientService.getClientProfile(clientId);
         Optional<HealthProgram> programOptional = healthProgramService.getHealthProgramById(programId);
 
-        if(clientOptional.isPresent() && programOptional.isPresent()){
-            // enroll client in the selected program
-            enrollmentService.enrollClientInProgram(clientOptional.get(), programOptional.get());
+        if (clientOptional.isPresent() && programOptional.isPresent()) {
+            Client client = clientOptional.get();
+            HealthProgram program = programOptional.get();
 
-            // after successful enrollment, redirect to success page
-            model.addAttribute("client", clientOptional.get());  // Add client info to the model for the success page
+            // Check if the client is already enrolled in the program
+            boolean alreadyEnrolled = client.getEnrollments().stream()
+                    .anyMatch(enrollment -> enrollment.getProgram().equals(program));
+
+            if (alreadyEnrolled) {
+                model.addAttribute("error", "Client is already enrolled in this program.");
+                model.addAttribute("selectedClient", client);
+                model.addAttribute("selectedProgram", program);
+                model.addAttribute("clients", clientService.getAllClients());
+                model.addAttribute("programs", healthProgramService.getAllHealthPrograms());
+                return "enrollment/enroll"; // Show the enrollment form again
+            }
+
+            // Enroll client in the selected program
+            enrollmentService.enrollClientInProgram(client, program);
+
+            // After successful enrollment, redirect to the success page
+            model.addAttribute("client", client);
             return "enrollment/enroll-success";
-        }
-        else {
+        } else {
             model.addAttribute("error", "Invalid client or program");
-            return "enrollment/enroll"; //if error arises , show enrollment form again
+            return "enrollment/enroll";
         }
-
     }
+
 }

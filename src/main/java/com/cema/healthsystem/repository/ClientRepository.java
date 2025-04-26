@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    // find client by Email method
+    // find client by Email
     Client findByEmail(String email);
 
     // find client by phone number

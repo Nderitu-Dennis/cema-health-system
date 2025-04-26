@@ -1,7 +1,6 @@
 package com.cema.healthsystem.controller;
 
 import com.cema.healthsystem.entity.HealthProgram;
-import com.cema.healthsystem.repository.HealthProgramRepository;
 import com.cema.healthsystem.service.HealthProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,7 +34,7 @@ public class HealthProgramController {
     @PostMapping("/create")
     public String createProgram(@ModelAttribute HealthProgram program) {
         healthProgramService.createHealthProgram(program);
-        return "redirect:/program/all-programs";
+        return "redirect:/programs/all-programs";
     }
 
     // list all health programs

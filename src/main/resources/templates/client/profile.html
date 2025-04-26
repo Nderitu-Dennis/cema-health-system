@@ -7,7 +7,7 @@
 
 <body>
 <!-- Navbar -->
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">Client Profile</h2>
@@ -17,6 +17,10 @@
         <p><strong>Name:</strong> <span th:text="${client.fullName}"></span></p>
         <p><strong>Email:</strong> <span th:text="${client.email}"></span></p>
         <p><strong>Phone:</strong> <span th:text="${client.phoneNumber}"></span></p>
+        <p><strong>Date of Birth:</strong> <span th:text="${client.dateOfBirth}"></span></p>
+        <p><strong>Sex:</strong> <span th:text="${client.gender}"></span></p>
+        <p><strong>Age:</strong> <span th:text="${age}"></span></p>
+
     </div>
 
     <!-- Enrollments -->
@@ -24,7 +28,7 @@
         <h3 class="text-xl font-semibold text-gray-700 mb-2">Enrolled Programs</h3>
         <ul class="list-disc pl-6">
             <li th:each="enrollment : ${enrollments}">
-                <span th:text="${enrollment.program.name}"></span> -
+                <strong th:text="${enrollment.program.programName}"></strong> on
                 <span th:text="${enrollment.enrollmentDate}"></span>
             </li>
         </ul>

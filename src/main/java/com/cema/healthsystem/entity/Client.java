@@ -1,12 +1,13 @@
 package com.cema.healthsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Entity(name="clients")
 @Data
@@ -33,5 +34,6 @@ public class Client {
     private LocalDate dateOfBirth;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-    private Set<Enrollment> enrollments;
+    @JsonManagedReference
+    private List<Enrollment> enrollments;
 }

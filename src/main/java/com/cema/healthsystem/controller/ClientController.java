@@ -5,15 +5,17 @@ import com.cema.healthsystem.entity.Enrollment;
 import com.cema.healthsystem.service.ClientService;
 import com.cema.healthsystem.service.EnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/clients")  // Ensure this is consistent for all routes
+@RequestMapping("/clients")
 public class ClientController {
 
     private final ClientService clientService;
@@ -35,25 +37,40 @@ public class ClientController {
     // handle form submission
     @PostMapping("/register")
     public String registerClient(@ModelAttribute Client client, Model model) {
-        Client savedClient = clientService.registerClient(client);  // Assuming this saves the client
+        Client savedClient = clientService.registerClient(client);
         model.addAttribute("client", savedClient);
-        return "redirect:/clients/profile/" + savedClient.getId(); // Fix URL path here
+        return "redirect:/clients/profile/" + savedClient.getId();
     }
+
+    // API to expose client profile data
+    @GetMapping("/api/profile/{id}")
+    @ResponseBody
+    public Client getClientProfileApi(@PathVariable Long id) {
+        return clientService.getClientProfile(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
+    }
+
 
     // show client profile
     @GetMapping("/profile/{id}")
     public String viewClientProfile(@PathVariable Long id, Model model) {
         Optional<Client> clientOptional = clientService.getClientProfile(id);
 
-        if (clientOptional.isPresent()) {
-            Client client = clientOptional.get();
-            List<Enrollment> enrollments = enrollmentService.getEnrollmentsByClient(client);
-            model.addAttribute("client", client);
-            model.addAttribute("enrollments", enrollments);
-            return "client/profile";
-        } else {
-            return "error/404";  // Make sure this page exists!
+
+        if (clientOptional.isEmpty()) {
+            return "redirect:/clients/search";
         }
+
+        Client client = clientOptional.get();
+        List<Enrollment> enrollments = enrollmentService.getEnrollmentsByClient(client);
+        model.addAttribute("client", client);
+        model.addAttribute("enrollments", enrollments);
+
+        if (client.getDateOfBirth() != null) {
+            int age = java.time.Period.between(client.getDateOfBirth(), java.time.LocalDate.now()).getYears();
+            model.addAttribute("age", age);
+        }
+        return "client/profile";
     }
 
     // search client by email or phone
@@ -68,7 +85,7 @@ public class ClientController {
                                Model model) {
         Optional<Client> clientOptional = Optional.empty();
 
-        // Prioritize email, then phoneNumber
+
         if (email != null && !email.isEmpty()) {
             clientOptional = clientService.findClientByEmail(email);
         } else if (phoneNumber != null && !phoneNumber.isEmpty()) {
@@ -76,10 +93,19 @@ public class ClientController {
         }
 
         if (clientOptional.isPresent()) {
-            return "redirect:/clients/profile/" + clientOptional.get().getId();  // Fix URL path here
+            return "redirect:/clients/profile/" + clientOptional.get().getId();
         } else {
             model.addAttribute("notFound", true);
             return "client/search";
         }
     }
+
+    // View all clients
+    @GetMapping("/all")
+    public String viewAllClients(Model model) {
+        List<Client> clients = clientService.getAllClients();
+        model.addAttribute("clients", clients);
+        return "client/all-clients";
+    }
+
 }
