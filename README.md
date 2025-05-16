@@ -63,6 +63,9 @@ A PowerPoint presentation outlining the approach, design, and solution can be fo
 # Conclusion
 This solution successfully enables doctors to create health programs, register and enroll clients, search for clients, view their profiles, and expose client profiles via an API.
 
+# UPDATE- After all this work, unfortunately i got rejected.
+
+
 
 
 
